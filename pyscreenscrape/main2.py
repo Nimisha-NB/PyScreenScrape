@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import json
+import requests
 
 enrol_names = ['Pre-Primary','I','II','III','IV','V','VI','VII','VIII','IX','X',
     'XI','XII','Class(1-12)','Class(1-12) With Pre-Primary']
@@ -72,4 +73,34 @@ def screenscrape(htmlfile):
         
     return(enrol_dict)
     # print(enrol_list[0].split()[-1]) 
+
+
+def fetch_page_content(udise_code):
+	url = 'https://src.udiseplus.gov.in/searchSchool/byUdiseCodeAndSchoolOnSearchPage'
+	headers = {
+		'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:103.0) Gecko/20100101 Firefox/103.0',
+		'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+		'Accept-Language': 'en-US,en;q=0.5',
+		'Content-Type': 'application/x-www-form-urlencoded',
+		'Origin': 'https://src.udiseplus.gov.in',
+		'Upgrade-Insecure-Requests': '1',
+		'Sec-Fetch-Dest': 'document',
+		'Sec-Fetch-Mode': 'navigate',
+		'Sec-Fetch-Site': 'cross-site',
+		'Sec-Fetch-User': '?1',
+		'Pragma': 'no-cache',
+		'Cache-Control': 'no-cache',
+		'Referer': 'https://src.udiseplus.gov.in/home'
+	}
+	data = {'searchTypeOnSearchPage':2,'udiseCode':udise_code,'selectDropDown':''}  # <- pass udice code here
+	x = requests.post(url, headers=headers, data = data)
+
+	soup = BeautifulSoup(x.text , "html.parser")
+	school_id = int(soup.find('input', {"name":'schoolIdforDashSearch'})["value"])
+
+	url = 'https://src.udiseplus.gov.in/searchSchool/getSchoolDetail' 
+	data = {'searchType':2,'searchBy':udise_code,'schoolIdforDashSearch':school_id}  # <- pass udice code here
+	x = requests.post(url, headers=headers, data = data)
+	return x.text
+
 

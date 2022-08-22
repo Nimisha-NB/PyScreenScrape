@@ -8,6 +8,13 @@ data = []
 data2 = []
 data3 = []
 data4 = []
+
+# this method returns the page content
+fetch_page_content(29320512802)		# <- pass udise here
+
+# import pdb; pdb.set_trace()
+
+
 screenscrape('home.html')
 data4.append(screenscrape('home.html'))
 data3.append(dictionary(column3_names))
