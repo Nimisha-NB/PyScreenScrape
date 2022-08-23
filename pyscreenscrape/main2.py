@@ -96,11 +96,14 @@ def fetch_page_content(udise_code):
 	x = requests.post(url, headers=headers, data = data)
 
 	soup = BeautifulSoup(x.text , "html.parser")
-	school_id = int(soup.find('input', {"name":'schoolIdforDashSearch'})["value"])
+	
+	input_params = {}
+	form_fields = soup.find('form',{'action': 'getSchoolDetail'}).findAll('input',{'type': 'hidden'})
+	for ff in form_fields:
+		input_params[str(ff["name"])] = int(ff["value"]) if ff["value"] else ''
 
 	url = 'https://src.udiseplus.gov.in/searchSchool/getSchoolDetail' 
-	data = {'searchType':2,'searchBy':udise_code,'schoolIdforDashSearch':school_id}  # <- pass udice code here
-	x = requests.post(url, headers=headers, data = data)
+	x = requests.post(url, headers=headers, data = input_params)
 	return x.text
 
 
