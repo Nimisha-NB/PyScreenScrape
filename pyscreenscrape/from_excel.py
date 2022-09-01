@@ -1,4 +1,5 @@
 import openpyxl
+# THINGS TO DO
 # to check if its the right udise code
 # to check if it has the details page
 # if run twice the data gets appended again(even if presesnt before)
