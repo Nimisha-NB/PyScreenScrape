@@ -4,7 +4,7 @@ import requests
 
 enrol_names = ['Pre-Primary','I','II','III','IV','V','VI','VII','VIII','IX','X',
     'XI','XII','Class(1-12)','Class(1-12) With Pre-Primary']
-column_names = ['School Name','UDISE CODE','State','District','Block','Cluster','Village',
+column_names = ['School Name','UDISE CODE','State','District','Block','Cluster',
     'PinCode','School Category','School Type','Class From','Class To','State Management',
     'National Management','Status','Location','Aff Board Sec.','Aff Board H.Sec.','Year of Establishment','Pre-Primary' ]
 column2_names = ['Building Status','Boundary Wall','No. of Boys Toilets','No. of Girls Toilets','No. of CWSN Toilets',
@@ -22,10 +22,12 @@ def dictionary(column):
         if detail in column and data_list[data_list.index(detail)+1] not in column and data_list[data_list.index(detail)+1] not in nope:
             #values are the next elements' to column_names
             main_dict[detail]=data_list[data_list.index(detail)+1]
+            
         # if keys are in column_names and values are in nope OR values are in column_names
         elif (detail in column and data_list[data_list.index(detail)+1] in nope) or (detail in column and data_list[data_list.index(detail)+1] in column):
             # values are empty strings to those keys
-            main_dict[detail]=' '
+            main_dict[detail]='NA'
+        
     return (main_dict)
 
 def screenscrape(htmlfile):
@@ -49,14 +51,7 @@ def screenscrape(htmlfile):
             pass
         else:
             data_list.append(element)
-
-    # print(data_list)
-    # print(enrol_list[::-1][-2].split('No. of Students')[-1].split())
-    # print(enrol_list[::-1])
-    
-
-
-    # for the last enrolment of students
+   
     enrol_list = []
     for enrolment in range(100):
         if data_list[::-1][enrolment]!='Enrolment of The Students':
